@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.mosip.kernel.auditmanager.entity.Audit;
-import io.mosip.kernel.auditmanager.queue.AuditQueueService;
+import io.mosip.kernel.auditmanager.repository.AuditRepository;
 import io.mosip.kernel.auditmanager.request.AuditRequestDto;
 import io.mosip.kernel.auditmanager.util.AuditUtils;
 import io.mosip.kernel.core.auditmanager.spi.AuditHandler;
@@ -12,7 +12,7 @@ import io.mosip.kernel.core.auditmanager.spi.AuditHandler;
 /**
  * Implementation of {@link AuditHandler} with function to write
  * {@link AuditRequestDto}
- * 
+ *
  * @author Dharmesh Khandelwal
  * @since 1.0.0
  *
@@ -21,7 +21,7 @@ import io.mosip.kernel.core.auditmanager.spi.AuditHandler;
 public class AuditHandlerImpl implements AuditHandler<AuditRequestDto> {
 
 	@Autowired
-	private AuditQueueService auditQueueService;
+	private AuditRepository auditRepository;
 
 	/*
 	 * (non-Javadoc)
@@ -33,11 +33,11 @@ public class AuditHandlerImpl implements AuditHandler<AuditRequestDto> {
 	@Override
 	public boolean addAudit(AuditRequestDto auditRequest) {
 		AuditUtils.validateAuditRequestDto(auditRequest);
-		return auditQueueService.enqueue(auditRequest);
+		auditRepository.save(toAuditEntity(auditRequest));
+		return true;
 	}
 
-
-	public Audit getAuditEntity(AuditRequestDto auditRequestDto) {
+	public Audit toAuditEntity(AuditRequestDto auditRequestDto) {
 		Audit audit = new Audit();
 		audit.setEventId(auditRequestDto.getEventId());
 		audit.setEventName(auditRequestDto.getEventName());
