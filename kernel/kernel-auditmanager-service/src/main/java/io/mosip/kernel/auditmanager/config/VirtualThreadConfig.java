@@ -6,14 +6,17 @@ import org.springframework.boot.autoconfigure.task.TaskExecutionAutoConfiguratio
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 
 /**
- * Provides a virtual-thread-based task executor that bypasses Spring Boot's
- * TaskExecutionAutoConfiguration, which relies on VirtualThreadDelegate loaded
+ * Provides virtual-thread-based task executor and scheduler beans that bypass
+ * Spring Boot's auto-configurations (TaskExecutionAutoConfiguration and
+ * TaskSchedulingAutoConfiguration), which rely on VirtualThreadDelegate loaded
  * via a multi-release JAR — a mechanism broken under PropertiesLauncher.
- * By defining this bean directly using Thread.ofVirtual() (compiled Java 21 API),
- * we avoid the MR-JAR classloading issue entirely.
+ * By using Thread.ofVirtual() directly (compiled Java 21 API), we avoid
+ * the MR-JAR classloading issue entirely.
  */
 @Configuration
 public class VirtualThreadConfig {
@@ -23,5 +26,13 @@ public class VirtualThreadConfig {
 		return new ConcurrentTaskExecutor(
 				Executors.newThreadPerTaskExecutor(
 						Thread.ofVirtual().name("application-", 0).factory()));
+	}
+
+	@Bean(name = "taskScheduler")
+	public TaskScheduler taskScheduler() {
+		return new ConcurrentTaskScheduler(
+				Executors.newScheduledThreadPool(
+						Runtime.getRuntime().availableProcessors(),
+						Thread.ofVirtual().name("scheduler-", 0).factory()));
 	}
 }
