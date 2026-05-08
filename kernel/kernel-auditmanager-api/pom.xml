@@ -32,13 +32,20 @@
      
      <dependencyManagement>
 		<dependencies>
-			<dependency>
+<!--			<dependency>
 				<groupId>io.mosip.kernel</groupId>
 				<artifactId>kernel-bom</artifactId>
 				<version>${kernel.core.version}</version>
 				<type>pom</type>
 			    <scope>import</scope>
-			</dependency>
+			</dependency>-->
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-dependencies</artifactId>
+					<version>3.2.12</version>
+					<type>pom</type>
+					<scope>import</scope>
+				</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -46,48 +53,6 @@
 			<groupId>io.mosip.kernel</groupId>
 			<artifactId>kernel-core</artifactId>
 			<version>${kernel.core.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-security</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-data-jpa</artifactId>
-				</exclusion>
-
-				<!-- Spring Boot -->
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-actuator</artifactId>
-				</exclusion>
-
-				<!-- Spring Cloud -->
-				<exclusion>
-					<groupId>org.springframework.cloud</groupId>
-					<artifactId>spring-cloud-starter-config</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.cloud</groupId>
-					<artifactId>spring-cloud-starter-bootstrap</artifactId>
-				</exclusion>
-
-				<!-- Spring Data -->
-				<exclusion>
-					<groupId>org.springframework.data</groupId>
-					<artifactId>spring-data-jpa</artifactId>
-				</exclusion>
-
-				<!-- Optional: test starter -->
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-test</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,6 +74,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
+			<version>2.4.4</version>  <!-- or keep your previous version -->
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
